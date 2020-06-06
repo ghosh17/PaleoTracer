@@ -29,7 +29,7 @@ close all
 clf
 
 
-siteId = 'PP';
+siteId = 'LV';
 
 %%Reading Excel
 
@@ -346,6 +346,7 @@ alkanes_matrix = [C_20, C_21, C_22, C_23, C_24, C_25, C_26, C_27, C_28, C_29, C_
 %Color per isotopic ratio. I want to be able to visualize how C3/C4
 %corresponds to aridity.
 
+func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples, t);
 
 %Function to plot ACL&d13C vs t; CPI&d13C vs t; C31_by_C29&d13C vs t;
 %OddAlkanes&d13C vs t; EvenAlkanes&d13C vs t;
