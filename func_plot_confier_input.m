@@ -1,8 +1,8 @@
-function [] = func_plot_confier_input(ConiferInput, IsotopicValue, t)
+function [] = func_plot_confier_input(ConiferInput, IsotopicValue, numsamples, t)
     hold on
     grid on;
     yyaxis left;
-    c = linspace(0,length(ConiferInput),length(ConiferInput));
+    c = linspace(t(1),t(numsamples),length(t));
     figure('Name', 'Confier Input: Retene/3RingSum');
     conifer_plot = scatter(t, ConiferInput,[],c);
     xlabel('Time');

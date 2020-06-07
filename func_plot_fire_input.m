@@ -1,5 +1,5 @@
-function [] = func_plot_fire_input(Fire_input, IsotopicValue, t)
-    c = linspace(0,length(Fire_input),length(Fire_input));
+function [] = func_plot_fire_input(Fire_input, IsotopicValue, numsamples, t)
+    c = linspace(t(1),t(numsamples),length(t));
     hold on
     grid on;
     

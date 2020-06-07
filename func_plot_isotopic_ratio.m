@@ -1,5 +1,5 @@
-function [] = func_plot_isotopic_ratio(t,IsotopicRatios)
-    %c = linspace(0,length(t),length(t));
+function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
+    %c = linspace(t(1),t(numsamples),length(t));
     hold on
     grid on;
     figure('Name', 'δ13C Isotopic ratio');

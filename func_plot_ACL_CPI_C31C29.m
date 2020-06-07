@@ -1,8 +1,8 @@
-function [] = func_plot_ACL_CPI_C31C29(ACL,CPI,C31_by_C29,IsotopicValue,t)
+function [] = func_plot_ACL_CPI_C31C29(ACL,CPI,C31_by_C29,IsotopicValue, numsamples, t)
     
 
+    c = linspace(t(1),t(numsamples),length(t));
     %ACL
-    c = linspace(0,length(ACL),length(ACL));
     hold on;
     grid on;    
     yyaxis left;

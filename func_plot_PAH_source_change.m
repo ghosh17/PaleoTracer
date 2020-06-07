@@ -1,5 +1,5 @@
-function [] = func_plot_PAH_source_change(PAHSourceChange, IsotopicValue, t)
-    c = linspace(0,length(PAHSourceChange),length(PAHSourceChange));
+function [] = func_plot_PAH_source_change(PAHSourceChange, IsotopicValue, numsamples, t)
+    c = linspace(t(1),t(numsamples),length(t));
     hold on
     grid on;
     
