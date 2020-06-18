@@ -331,7 +331,7 @@ end
 %%Isotopic signature
 
 
-func_plot_isotopic_ratio(t, isotopic_value);
+func_plot_isotopic_ratio(t, numsamples, isotopic_value);
 
 
 %%Alkanes
@@ -346,7 +346,7 @@ alkanes_matrix = [C_20, C_21, C_22, C_23, C_24, C_25, C_26, C_27, C_28, C_29, C_
 %Color per isotopic ratio. I want to be able to visualize how C3/C4
 %corresponds to aridity.
 
-func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples, t);
+func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t);
 
 %Function to plot ACL&d13C vs t; CPI&d13C vs t; C31_by_C29&d13C vs t;
 %OddAlkanes&d13C vs t; EvenAlkanes&d13C vs t;
@@ -355,7 +355,7 @@ func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples, t);
 
 
 
-func_plot_ACL_CPI_C31C29(ACL,CPI,C31_by_C29,isotopic_value,t);
+func_plot_ACL_CPI_C31C29(ACL,CPI,C31_by_C29,isotopic_value,numsamples,t);
 
 
 %{
@@ -403,10 +403,10 @@ func_plot_combustion_characteristics(FLU_FLUPYR, ANT_ANTPHE);
 
 func_plot_combustion_characteristics_2(IND_INDBgP, BaA_BaACHY);
 
-func_plot_fire_input(FireInput, isotopic_value, t);
+func_plot_fire_input(FireInput, isotopic_value, numsamples, t);
 
-func_plot_PAH_source_change(PAHSourceChange, isotopic_value, t);
+func_plot_PAH_source_change(PAHSourceChange, isotopic_value, numsamples, t);
 
-func_plot_confier_input(ConiferInput, isotopic_value, t)
+func_plot_confier_input(ConiferInput, isotopic_value, numsamples, t)
 
 
