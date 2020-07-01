@@ -5,6 +5,7 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     figure('Name', 'δ13C Isotopic ratio');
     %scatter(t,IsotopicRatios,'*','r');
     plot(t,IsotopicRatios,'*r');
+    set(gca, 'XDir','reverse');
     
     %{
     %%Best fit to data
@@ -23,8 +24,22 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     
     %%Plot properties
     ylim([-35, -10]);
-    xlabel('Time');
-    ylabel('δ13C');
+    xlabel('Time (Ma)');
+    ylabel('δ13C (‰)');
     legend('Bulk Organic Matter δ13C');
+    
+    %%Save plot file
+    %Location to save Plots
+    PlotFolder = strcat(pwd,'/Plots/');
+    filename = 'δ13C_temporal';
+    %Corner case handling
+    %if no Plot folder exists
+    if ~exist(PlotFolder, 'dir')
+        %create a figure folder
+        mkdir(PlotFolder);
+    end
+    %Save all figures to this folder
+    saveas(gcf, fullfile(PlotFolder, filename));
+    
     hold off;
 end

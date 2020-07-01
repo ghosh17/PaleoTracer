@@ -1,5 +1,6 @@
 function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     C27 = C_27 ./(C_27 + C_29 + C_31);
     
     C29 = C_29 ./(C_27 + C_29 + C_31);
@@ -14,9 +15,28 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     terplot();
     ternaryc(C27, C29, C31, c, 'o');
     terlabel('C27', 'C29', 'C31');
+    
+    %%Save plot file
+    %Location to save Plots
+    PlotFolder = strcat(pwd,'/Plots/');
+    filename = 'C27_C29_C31_ternary';
+    %Corner case handling
+    %if no Plot folder exists
+    if ~exist(PlotFolder, 'dir')
+        %create a figure folder
+        mkdir(PlotFolder);
+    end
+    %Save all figures to this folder
+    saveas(gcf, fullfile(PlotFolder, filename));
+    
     hold off;
+    
     % Remove path (at end of script/script clean-up)
     rmpath(added_path);
+    
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     C27 = C_27 ./(C_27 + C_29 + C_33);
     
@@ -31,10 +51,30 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     terplot();
     ternaryc(C27, C29, C33, c, 'o');
     terlabel('C27', 'C29', 'C33');
+    
+    %%Save plot file
+    %Location to save Plots
+    PlotFolder = strcat(pwd,'/Plots/');
+    filename = 'C27_C29_C33_ternary';
+    %Corner case handling
+    %if no Plot folder exists
+    if ~exist(PlotFolder, 'dir')
+        %create a figure folder
+        mkdir(PlotFolder);
+    end
+    %Save all figures to this folder
+    saveas(gcf, fullfile(PlotFolder, filename));
+    
     hold off;
+    
     % Remove path (at end of script/script clean-up)
     rmpath(added_path);
     
+    
+    
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     C27 = C_27 ./(C_27 + C_29 + C_35);
     
@@ -48,8 +88,24 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     terplot();
     ternaryc(C27, C29, C35, c, 'o');
     terlabel('C27', 'C29', 'C35');
+    
+    %%Save plot file
+    %Location to save Plots
+    PlotFolder = strcat(pwd,'/Plots/');
+    filename = 'C27_C29_C35_ternary';
+    %Corner case handling
+    %if no Plot folder exists
+    if ~exist(PlotFolder, 'dir')
+        %create a figure folder
+        mkdir(PlotFolder);
+    end
+    %Save all figures to this folder
+    saveas(gcf, fullfile(PlotFolder, filename));
+    
     hold off;
+    
     % Remove path (at end of script/script clean-up)
     rmpath(added_path);
     
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

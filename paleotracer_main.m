@@ -31,6 +31,12 @@ clf
 
 siteId = 'LV';
 
+%%Remove figure folder if it exists
+PlotFolder = strcat(pwd,'/Plots');
+if exist(PlotFolder, 'dir')
+    rmdir(PlotFolder, 's');
+end
+
 %%Reading Excel
 
 %Read experiment parameter files
@@ -325,7 +331,7 @@ for ind = 1:numsamples
 end 
 
 for ind = 1:length(run_samples)
-    t(ind) = (-1) * age_array(run_samples(ind));
+    t(ind) = age_array(run_samples(ind));
 end
 
 %%Isotopic signature
@@ -397,11 +403,13 @@ FireInput = TotalPAH./C_31;
 
 ConiferInput = Retene./(Sum3Ring);
 
-func_plot_source_and_degredation(MPh_PHE, FLU_FLUPYR);
+func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR);
 
-func_plot_combustion_characteristics(FLU_FLUPYR, ANT_ANTPHE);
+func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, isotopic_value, numsamples, t);
 
-func_plot_combustion_characteristics_2(IND_INDBgP, BaA_BaACHY);
+func_plot_combustion_characteristics_FLUPYR_ANTPHE(FLU_FLUPYR, ANT_ANTPHE);
+
+func_plot_combustion_characteristics_INDBgPBaACHY(IND_INDBgP, BaA_BaACHY);
 
 func_plot_fire_input(FireInput, isotopic_value, numsamples, t);
 
