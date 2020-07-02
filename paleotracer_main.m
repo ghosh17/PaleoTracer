@@ -9,10 +9,25 @@
 #######
 
 Description:
+This program is intended to help visualize trends and automate the processing of Carbon 
+Isotopic ratios and molecular biomarkers like lipid biomarkers (wax n-alkanes) 
+and Poly Aromatic Hyrocarbons (PAH) from Bulk Organic Matter(BOM) 
+sampled from dated paleosol outcrops or sediment cores. 
+The ultimate goal is to discern patterns in terrestrial paleoecology, 
+paleofire regimes and paleoclimatology.
  
 Input arguments:
+XX_Biomarkers_experiment_parameters.xlsx
+XX_Raw_data.xlsx
+XX_isotopic_ratio.xlsx
+
+Where XX is a alias for site name. This alias can be changed in 
+this program by changing the variable for 'siteID'.
+
 
 Output(s):
+15 separate plots in foleder Plots located in pwd/Plots.
+
 
 Version: 0.2
 
@@ -30,9 +45,9 @@ close all
 clf
 
 
-siteId = 'LV';
+siteId = 'PP';
 
-%%Remove figure folder if it exists
+%%Remove figure folder (output folder) if it exists
 PlotFolder = strcat(pwd,'/Plots');
 if exist(PlotFolder, 'dir')
     rmdir(PlotFolder, 's');
