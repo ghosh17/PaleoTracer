@@ -9,8 +9,9 @@ function [] = func_plot_fire_input(Fire_input, IsotopicValue, numsamples, t)
     set(gca,'yscale','log')
     xlabel('Time (Ma)');
     ylabel('Sum(PAH)/C31 (log scale)');
+    ylim([0.2*min(Fire_input),2*max(Fire_input)]);
    
-    set(gca, 'XDir','reverse')
+    set(gca, 'XDir','reverse');
     
     yyaxis right;
     isotope_plot = scatter(t,IsotopicValue,'*','r');

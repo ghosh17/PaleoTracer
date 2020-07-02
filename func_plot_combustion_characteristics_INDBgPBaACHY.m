@@ -6,6 +6,10 @@ figure('Name', 'Combustion_characteristics_INDBgPBaACHY');
 scatter(IND_INDBgP, BaA_BaACHY, [], c);
 xlabel('IND/(IND+BgP)');
 ylabel('BaA/(BaA+CHY)');
+line([0.2,0.2],[0,1]);
+line([0.5,0.5],[0,1]);
+line([0,1],[0.2,0.2]);
+line([0,1],[0.35,0.35]);
 
 %%Save plot file
     %Location to save Plots

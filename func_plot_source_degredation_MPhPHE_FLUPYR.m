@@ -6,11 +6,15 @@ function [] = func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR)
     figure('Name', 'source_degredation');
     scatter(MPh_PHE, FLU_FLUPYR, [], c);
     hold on;
-    plot(1,0);
-    plot(0,0.5);
+    line([1,1],[0,1]);
+    line([0,1.6],[0.5,0.5]);
     hold off;
     xlabel('MPh/PHE');
     ylabel('FLU/(FLU+PYR)');
+    xt = [0.2 0.2 1.2 1.2];
+    yt = [0.8 0.2 0.2 0.8];
+    str = {'Pyrogenic & Primary','Pyrogenic & Degraded','Petrogenic & Degraded','Petrogenic & Primary'};
+    text(xt,yt,str)
     
     %%Save plot file
     %Location to save Plots

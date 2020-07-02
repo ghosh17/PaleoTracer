@@ -13,6 +13,10 @@ function [] = func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, IsotopicValue, numsample
    
     set(gca, 'XDir','reverse')
     
+    buffer = (t(1)-t(numsamples))/numsamples;
+    line([t(1)+buffer, t(numsamples)-buffer],[0.4,0.4],'Color','black','LineStyle','--');
+    line([t(1)+buffer, t(numsamples)-buffer],[0.5,0.5],'Color','black','LineStyle','--');
+    
     %Secondary plot showing Carbon isotopic ratios
     yyaxis right;
     isotope_plot = scatter(t,IsotopicValue,'*','r');

@@ -1,7 +1,8 @@
 %%Author: Adit Ghosh
 %%Email: aditghosh94@gmail.com or adit.ghosh.605@my.csun.edu
-%github: github.com/ghosh17
-%California State University, Northridge
+%%Github: github.com/ghosh17
+%%California State University, Northridge
+%%Website: https://geoecology.wixsite.com/aditghosh
 
 %{
 
@@ -13,7 +14,7 @@ Input arguments:
 
 Output(s):
 
-Version: 0.1
+Version: 0.2
 
 #######
 
@@ -415,6 +416,8 @@ func_plot_fire_input(FireInput, isotopic_value, numsamples, t);
 
 func_plot_PAH_source_change(PAHSourceChange, isotopic_value, numsamples, t);
 
-func_plot_confier_input(ConiferInput, isotopic_value, numsamples, t)
+func_plot_confier_input(ConiferInput, isotopic_value, numsamples, t);
+
+func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t);
 
 

@@ -7,6 +7,11 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     plot(t,IsotopicRatios,'*r');
     set(gca, 'XDir','reverse');
     
+    
+    buffer = (t(1)-t(numsamples))/numsamples;
+    line([t(1)+buffer, t(numsamples)-buffer], [-24,-24],'Color','red','LineStyle','--');
+    line([t(1)+buffer,t(numsamples)-buffer], [-28,-28],'Color','red','LineStyle','--');
+    
     %{
     %%Best fit to data
     %We use Robust regression inplace of Ordinary Least Square (OLS), as outlyers

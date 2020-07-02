@@ -8,6 +8,7 @@ function [] = func_plot_PAH_source_change(PAHSourceChange, IsotopicValue, numsam
     PAH_source=scatter(t, PAHSourceChange,[],c);
     xlabel('Time (Ma)');
     ylabel('Sum(3-ring-PAH)/sum(PAH)');
+    line([t(1),t(numsamples)], [0.5,0.5]);
     legend('Fire Input');
     set(gca, 'XDir','reverse');
     
