@@ -80,55 +80,55 @@ isotopic_value = str2double(string(isotopic_value_temp));
 %Initialization of variables
 j = 1;
 i = 1;
-[row,col] = size(data_all);
-numsamples = col/6;
-sample_name = strings(numsamples);
-sample_run = 1;
-run_samples = zeros(numsamples,1);
-t = zeros(numsamples,1);
+[row,col] = size(data_all); % This is the size of the HP gas chromatograph output file
+numsamples = col/6; 
+sample_name = strings(numsamples); %Initializing sample name matrix
+sample_run = 1; 
+run_samples = zeros(numsamples,1); %Initializing sample matrix
+t = zeros(numsamples,1); %Initializing time matrix
 
 
-%Initializing alkanes concentrations
-C_20 = zeros(numsamples,1);
-C_21 = zeros(numsamples,1);
-C_22 = zeros(numsamples,1);
-C_23 = zeros(numsamples,1);
-C_24 = zeros(numsamples,1);
-C_25 = zeros(numsamples,1);
-C_26 = zeros(numsamples,1);
-C_27 = zeros(numsamples,1);
-C_28 = zeros(numsamples,1);
-C_29 = zeros(numsamples,1);
-C_30 = zeros(numsamples,1);
-C_31 = zeros(numsamples,1);
-C_32 = zeros(numsamples,1);
-C_33 = zeros(numsamples,1);
-C_34 = zeros(numsamples,1);
-C_35 = zeros(numsamples,1);
-C_36 = zeros(numsamples,1);
-C_37 = zeros(numsamples,1);
-C_38 = zeros(numsamples,1);
+%Initializing n-alkanes concentrations
+C_20 = zeros(numsamples,1); % n-alkane C20
+C_21 = zeros(numsamples,1); % n-alkane C21
+C_22 = zeros(numsamples,1); % n-alkane C22
+C_23 = zeros(numsamples,1); % n-alkane C23
+C_24 = zeros(numsamples,1); % n-alkane C24
+C_25 = zeros(numsamples,1); % n-alkane C25
+C_26 = zeros(numsamples,1); % n-alkane C26
+C_27 = zeros(numsamples,1); % n-alkane C27
+C_28 = zeros(numsamples,1); % n-alkane C28
+C_29 = zeros(numsamples,1); % n-alkane C29
+C_30 = zeros(numsamples,1); % n-alkane C30
+C_31 = zeros(numsamples,1); % n-alkane C31
+C_32 = zeros(numsamples,1); % n-alkane C32
+C_33 = zeros(numsamples,1); % n-alkane C33
+C_34 = zeros(numsamples,1); % n-alkane C34
+C_35 = zeros(numsamples,1); % n-alkane C35
+C_36 = zeros(numsamples,1); % n-alkane C36
+C_37 = zeros(numsamples,1); % n-alkane C37
+C_38 = zeros(numsamples,1); % n-alkane C38
 
 
 %Initialize PAH concentrations
-ACE = zeros(numsamples,1);
-ACY = zeros(numsamples,1);
-ANT = zeros(numsamples,1);
-BaA = zeros(numsamples,1);
-BaP = zeros(numsamples,1);
-BbF = zeros(numsamples,1);
-BgP = zeros(numsamples,1);
-BkF = zeros(numsamples,1);
-CHY = zeros(numsamples,1);
-DaA = zeros(numsamples,1);
-FLU = zeros(numsamples,1);
-FLE = zeros(numsamples,1);
-IND = zeros(numsamples,1);
-MPh = zeros(numsamples,1);
-NAP = zeros(numsamples,1);
-PHE = zeros(numsamples,1);
-PYR = zeros(numsamples,1);
-Retene = zeros(numsamples,1);
+ACE = zeros(numsamples,1); %
+ACY = zeros(numsamples,1); %
+ANT = zeros(numsamples,1); %Anthracene
+BaA = zeros(numsamples,1); %Benzo[a]anthracene
+BaP = zeros(numsamples,1); %Benzo[a]pyrene
+BbF = zeros(numsamples,1); %Benzo[b]fluoranthrene
+BgP = zeros(numsamples,1); %Benzo[g]perylene
+BkF = zeros(numsamples,1); %Benzo[k]fluoranthrene
+CHY = zeros(numsamples,1); %Chrysene
+DaA = zeros(numsamples,1); %Dibenz[a]anthracene
+FLU = zeros(numsamples,1); %Fluoranthrene
+FLE = zeros(numsamples,1); %
+IND = zeros(numsamples,1); %indeno[1,2,3-cd]pyrene
+MPh = zeros(numsamples,1); %Methyl
+NAP = zeros(numsamples,1); %Naphthelene 
+PHE = zeros(numsamples,1); %Phenanthrene
+PYR = zeros(numsamples,1); %Pyrene
+Retene = zeros(numsamples,1); %Retene
 
 
 
@@ -166,9 +166,9 @@ while j < col
             
             conversion_factor = (num_exp_parameter(sample_run, 3) * 1000) / (Mass_net * 1000);
             
+            %%Convert to  concentration within sample
             
-            
-            %Alkanes
+            %n-Alkanes 
             
             if (strcmp(data_all(i,j),'C20'))
                 C_20(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
@@ -247,7 +247,7 @@ while j < col
                 C_38(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
-            %PAH
+            %Poly Aromatic Hydrocarbon
             
             if (strcmp(data_all(i,j),'ACE'))
                 ACE(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
@@ -288,7 +288,7 @@ while j < col
             end
             
            if (strcmp(data_all(i,j),'DaA'))
-                NAP(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+                DaA(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
             if (strcmp(data_all(i,j),'FLE'))
@@ -411,7 +411,7 @@ BaA_BaACHY = BaA ./ (BaA + CHY);
 
 Sum3Ring = ACY + ACE + ANT + FLE + PHE + Retene; %sum of 3 ring PAH
 
-TotalPAH = NAP + Sum3Ring + FLU + PYR + BaA + CHY + BkF + BbF + BaP + IND +DaA + BgP;
+TotalPAH = NAP + Sum3Ring + FLU + PYR + BaA + CHY + BkF + BbF + BaP + IND +DaA + BgP;%sum of all PAH's
 
 PAHSourceChange = Sum3Ring./TotalPAH;
 
