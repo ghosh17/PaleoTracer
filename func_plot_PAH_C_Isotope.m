@@ -1,22 +1,29 @@
 function [] = func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t)
 
-
-    hold on
-    grid on;
-    yyaxis left;
-    c = linspace(t(1),t(numsamples),length(t));
-    figure('Name', 'Fire v/s Vegetation Change');
-    PAH_C_isotope_plot = scatter(isotopic_value, FireInput,[],c);
-    set(gca,'yscale','log')
-    xlabel('δ13C (‰)');
-    ylabel('Sum(PAH)/C31 (log scale)');
-    ymin=0.2*min(FireInput);
-    ymax=2*max(FireInput);
-    line([-28,-28],[ymin,ymax]);
-    line([-24,-24],[ymin,ymax]);
-    xlim([-35, -10]);
+    %%% LV values
+    FireInput(15) = 0.04824;
+    isotopic_value(15) = -21.52;
     
-    ylim([ymin,ymax]);
+    grid on
+    
+    %hold on
+    %grid on;
+    %yyaxis left;
+    %c = linspace(t(1),t(numsamples),length(t));
+    figure('Name', 'Fire v/s Vegetation Change');
+    PAH_C_isotope_plot = scatter(isotopic_value, FireInput, 'r','filled');
+    set(gca,'yscale','log');
+    xlabel('δ13C (‰)');
+    ylabel('Sum(PAH)/C31 (Increasing fire frequency)');
+    xlim([min(isotopic_value) max(isotopic_value)]);
+    ylim([min(FireInput) max(FireInput)]);
+    %ymin=0.2*min(FireInput);
+    %ymax=2*max(FireInput);
+    %line([-28,-28],[ymin,ymax]);
+    %line([-24,-24],[ymin,ymax]);
+    %xlim([-35, -10]);
+    
+    %ylim([ymin,ymax]);
     
     %legend([PAH_C_isotope_plot], {'Bulkδ13C v/s Fire input'})
 
@@ -37,6 +44,6 @@ function [] = func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t)
     
     
     
-    hold off
+    %hold off
 
 end

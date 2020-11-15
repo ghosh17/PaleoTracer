@@ -13,8 +13,8 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     added_path = [pwd,'/ternary2']; %change to: added_path = '/path' for your required path
     addpath(added_path);
     terplot();
-    ternaryc(C27, C29, C31, c, 'o');
-    terlabel('C27', 'C29', 'C31');
+    ternaryc(C31, C27, C29, c, 'o');
+    terlabel('C31', 'C27', 'C29');
     
     %%Save plot file
     %Location to save Plots
@@ -49,8 +49,8 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     added_path = [pwd,'/ternary2']; %change to: added_path = '/path' for your required path
     addpath(added_path);
     terplot();
-    ternaryc(C27, C29, C33, c, 'o');
-    terlabel('C27', 'C29', 'C33');
+    ternaryc(C33, C27, C29, c, 'o');
+    terlabel('C33', 'C27', 'C29');
     
     %%Save plot file
     %Location to save Plots
@@ -86,8 +86,8 @@ function [] = func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t)
     added_path = [pwd,'/ternary2']; %change to: added_path = '/path' for your required path
     addpath(added_path);
     terplot();
-    ternaryc(C27, C29, C35, c, 'o');
-    terlabel('C27', 'C29', 'C35');
+    ternaryc( C35, C27, C29, c, 'o');
+    terlabel('C35', 'C27', 'C29');
     
     %%Save plot file
     %Location to save Plots

@@ -4,13 +4,14 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     grid on;
     figure('Name', 'δ13C Isotopic ratio');
     %scatter(t,IsotopicRatios,'*','r');
-    plot(t,IsotopicRatios,'*r');
-    set(gca, 'XDir','reverse');
+    plot(IsotopicRatios, t, '*r');
+    set(gca, 'YDir','reverse');
     
     
     buffer = (t(1)-t(numsamples))/numsamples;
-    line([t(1)+buffer, t(numsamples)-buffer], [-24,-24],'Color','red','LineStyle','--');
-    line([t(1)+buffer,t(numsamples)-buffer], [-28,-28],'Color','red','LineStyle','--');
+    %line([t(1)+buffer, t(numsamples)-buffer], [-20,-20],'Color','red','LineStyle','--');
+    %line([t(1)+buffer,t(numsamples)-buffer], [-26,-26],'Color','red','LineStyle','--');
+    
     
     %{
     %%Best fit to data
@@ -28,9 +29,12 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     %}
     
     %%Plot properties
-    ylim([-35, -10]);
-    xlabel('Time (Ma)');
-    ylabel('δ13C (‰)');
+    xlim([-35, -10]);
+    ylim_min = t(numsamples) - ((t(numsamples) - t(1))/10);
+    ylim_max = t(1) + ((t(numsamples) - t(1))/10);
+    ylim([ylim_min ylim_max]);
+    ylabel('Time (Ma)');
+    xlabel('δ13C (‰)');
     legend('Bulk Organic Matter δ13C');
     
     %%Save plot file
