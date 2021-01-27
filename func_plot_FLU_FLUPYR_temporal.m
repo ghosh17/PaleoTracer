@@ -28,7 +28,7 @@ function [] = func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, IsotopicValue, numsample
     %%Save plot file
     %Location to save Plots
     PlotFolder = strcat(pwd,'/Plots/');
-    filename = 'Combustion_Character_Flu_Pyr_Temporal';
+    filename = 'Combustion_Character_Flu_Pyr_Temporal.jpg';
     %Corner case handling
     %if no Plot folder exists
     if ~exist(PlotFolder, 'dir')

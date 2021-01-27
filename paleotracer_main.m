@@ -45,7 +45,7 @@ close all
 clf
 
 
-siteId = 'PP';
+siteId = 'RI';
 
 %%Remove figure folder (output folder) if it exists
 PlotFolder = strcat(pwd,'/Plots');
@@ -66,6 +66,8 @@ experiment_parameter_file = strcat(siteId,'_Biomarkers_experiment_parameters');
 file_name = strcat(siteId,'_Raw_data.xlsx');
 [~, ~, data_all] = xlsread(file_name);
 
+
+%%%%%%%%%%%%%%%%%
 %Read D13C isotopic signature for bulk organic carbon
 
 isotopic_ratio_file = strcat(siteId,'_isotopic_ratio.xlsx');
@@ -73,6 +75,11 @@ isotopic_ratio_file = strcat(siteId,'_isotopic_ratio.xlsx');
 %Null handling in isotopic values
 [~, ~, isotopic_value_temp] = xlsread(isotopic_ratio_file,'B:B');
 isotopic_value = str2double(string(isotopic_value_temp));
+
+%%%%%%%%%%%%%%%%%%%
+%Read Bulk Geochemistry XRF data
+xrf_file = strcat(siteId,'_XRF.xlsx');
+[~, ~, xrf_all] = xlsread(xrf_file); 
 
 
 %%Initializations
@@ -115,7 +122,9 @@ ACE = zeros(numsamples,1); %
 ACY = zeros(numsamples,1); %
 ANT = zeros(numsamples,1); %Anthracene
 BaA = zeros(numsamples,1); %Benzo[a]anthracene
+BeA = zeros(numsamples,1); %Benzo[e]anthracene
 BaP = zeros(numsamples,1); %Benzo[a]pyrene
+BeP = zeros(numsamples,1); %Benzo[e]pyrene
 BbF = zeros(numsamples,1); %Benzo[b]fluoranthrene
 BgP = zeros(numsamples,1); %Benzo[g]perylene
 BkF = zeros(numsamples,1); %Benzo[k]fluoranthrene
@@ -124,7 +133,28 @@ DaA = zeros(numsamples,1); %Dibenz[a]anthracene
 FLU = zeros(numsamples,1); %Fluoranthrene
 FLE = zeros(numsamples,1); %
 IND = zeros(numsamples,1); %indeno[1,2,3-cd]pyrene
-MPh = zeros(numsamples,1); %Methyl
+C1_MPh1 = zeros(numsamples,1);
+C1_MPh2 = zeros(numsamples,1);
+C1_MPh3 = zeros(numsamples,1);
+C1_MPh4 = zeros(numsamples,1);
+C1_MPh5 = zeros(numsamples,1);
+C2_MPh1 = zeros(numsamples,1);
+C2_MPh3 = zeros(numsamples,1);
+C2_MPh4 = zeros(numsamples,1);
+C2_MPh5 = zeros(numsamples,1);
+C2_MPh6B = zeros(numsamples,1);
+C2_MPh6D = zeros(numsamples,1);
+C3_MPh1 = zeros(numsamples,1);
+C3_MPh2 = zeros(numsamples,1);
+C3_MPh3 = zeros(numsamples,1);
+C3_MPh4 = zeros(numsamples,1);
+C3_MPh5 = zeros(numsamples,1);
+C3_MPh6 = zeros(numsamples,1);
+C3_MPh7 = zeros(numsamples,1);
+DMP_1_7 = zeros(numsamples,1);%C2 methylated PAH
+DMP_2_6_DMP_3_5 = zeros(numsamples,1);%C2 Methylated PAH
+DMP_1_2 = zeros(numsamples,1);%C2 Methylated PAH
+MPh = zeros(numsamples,1); %C1 Methyl Phenantherene
 NAP = zeros(numsamples,1); %Naphthelene 
 PHE = zeros(numsamples,1); %Phenanthrene
 PYR = zeros(numsamples,1); %Pyrene
@@ -142,29 +172,16 @@ while j < col
                 sample_name (sample_run) = s1;
             end
             
-            Mass_net = num_exp_parameter(sample_run, 4) * num_exp_parameter(sample_run, 2) / num_exp_parameter(sample_run, 1);
+          
+            bio_extract = num_exp_parameter(sample_run, 1);
             
-            %DELETE CONDITIONALS BELOW WHEN PP PARAMETERS KNOWN
-            if strcmp(siteId,'PP')
-                if (sample_run == 1)
-                    Mass_net = 0.01008;
-                end
-                if (sample_run == 3)
-                    Mass_net = 0.01;
-                end
-                if (sample_run == 6)
-                    Mass_net = 0.01008;
-                end
-                if (sample_run == 7)
-                    Mass_net = 0.0051935;
-                end
-                if (sample_run == 10)
-                    Mass_net = 0.01009;
-                end
-            end
-            %
+            bulk_extract = num_exp_parameter(sample_run, 2);
             
-            conversion_factor = (num_exp_parameter(sample_run, 3) * 1000) / (Mass_net * 1000);
+            Mass_net = num_exp_parameter(sample_run, 3);
+            
+            conversion_factor = (bio_extract + bulk_extract)/ Mass_net;
+            
+            
             
             %%Convert to  concentration within sample
             
@@ -266,9 +283,17 @@ while j < col
             if (strcmp(data_all(i,j),'BaA'))
                 BaA(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
+                      
+            if (strcmp(data_all(i,j),'BeA'))
+                BaP(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
             
             if (strcmp(data_all(i,j),'BaP'))
                 BaP(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'BeP'))
+                BeP(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
             if (strcmp(data_all(i,j),'BbF'))
@@ -311,10 +336,92 @@ while j < col
                 PHE(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
-            if (strcmp(data_all(i,j),'C1-PHE1'))
-                MPh(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            if (strcmp(data_all(i,j),'C1-PHE1 (3-MP)'))
+                C1_MPh1(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
+            if (strcmp(data_all(i,j),'C1-PHE2 (2-MP)'))
+                C1_MPh2(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C1-PHE3'))
+                C1_MPh3(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C1-PHE4 (9-MP)'))
+                C1_MPh4(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+    
+            if (strcmp(data_all(i,j),'C1-PHE5 (1-MP)'))
+                C1_MPh5(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE1 (9-/2-/1-EP+3,6-DMP)'))
+                C2_MPh1(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE3 (2,7-DMP)'))
+                C2_MPh3(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            %%
+            if (strcmp(data_all(i,j),'C2-PHE4 (1,3-/3,9-/2,10-/3,10-DMP)'))
+                C2_MPh4(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE5 (2,5-/2,9-/1,6-DMP)'))
+                C2_MPh5(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE6B (2,3-DMP)'))
+                C2_MPh6B(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE6d (1,8-DMP)'))
+                C2_MPh6D(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE1 (1,3,6-/1,3,10-/2,6,10-TMP)'))
+                C3_MPh1(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE2 (1,3,7/2,6,9,2,7,9-TMP)'))
+                C3_MPh2(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE3 (1,3,9/2,3,6-TMP)'))
+                C3_MPh3(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE4 (1,6,9/1,7,9/2,3,7-TMP)'))
+                C3_MPh4(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+           
+            if (strcmp(data_all(i,j),'C3-PHE5 (1,3,8/2,3,10-TMP)'))
+                C3_MPh5(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE6 (1,6,7-TMP)'))
+                C3_MPh6(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C3-PHE7 (1,2,6-TMP)'))
+                C3_MPh7(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            %%%%
+            
+            if (strcmp(data_all(i,j),'C2-PHE6 (1,7-DMP)'))
+                DMP_1_7(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE2 (3,5/2,6-DMP)'))
+                DMP_2_6_DMP_3_5(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+            
+            if (strcmp(data_all(i,j),'C2-PHE7 (1,2-DMP)'))
+                DMP_1_2(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
+            end
+           
             if (strcmp(data_all(i,j),'PYR'))
                 PYR(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
@@ -324,9 +431,6 @@ while j < col
             end
             
             
-            
-            
-    
            i = i + 1;
     end
     sample_run = sample_run + 1;
@@ -341,33 +445,35 @@ end
 [Age_matrix,age_array,Sample_name_array] = func_age(siteId);
 
 for ind = 1:numsamples
-    
     temp_extract  = regexp(sample_name(ind), '\d+', 'match');
     run_samples(ind) = str2double(temp_extract);
 end 
 
 for ind = 1:length(run_samples)
+    
     t(ind) = age_array(run_samples(ind));
 end
 
 %%Isotopic signature
 
-
+%{
 func_plot_isotopic_ratio(t, numsamples, isotopic_value);
 
+%}
 
 %%Alkanes
 
 alkanes_matrix = [C_20, C_21, C_22, C_23, C_24, C_25, C_26, C_27, C_28, C_29, C_30, C_31, C_32, C_33, C_34, C_35, C_36, C_37, C_38];
 
-
 [ACL, CPI, C31_by_C29, Sum_odd_alkanes, Sum_even_alkanes] = func_alkanes(C_20, C_21, C_22, C_23, C_24, C_25, C_26, C_27, C_28, C_29, C_30, C_31, C_32, C_33, C_34, C_35, C_36, C_37, C_38);
+
+VPD = 1.3125 - sqrt(14.1208 - 0.4629*ACL);
 
 %Function to plot ternary plot for C31,C29,C27;C33,C29,C27;C35,C29,C27; Bush,
 %McInerney, et.al
 %Color per isotopic ratio. I want to be able to visualize how C3/C4
 %corresponds to aridity.
-
+%{
 func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t);
 
 %Function to plot ACL&d13C vs t; CPI&d13C vs t; C31_by_C29&d13C vs t;
@@ -377,8 +483,9 @@ func_turnplot_alkanes(C_27,C_29,C_31,C_33,C_35,numsamples,t);
 
 
 
-func_plot_ACL_CPI_C31C29(ACL,CPI,C31_by_C29,isotopic_value,numsamples,t);
+func_plot_ACL_VPD_CPI_C31C29(ACL, VPD, CPI,C31_by_C29,isotopic_value,numsamples,t);
 
+%}
 
 %{
 
@@ -397,6 +504,12 @@ C31_by_C29 = C_31./C_29;
 
 %%PAH
 
+MPh1 = C1_MPh1 + C1_MPh2 + C1_MPh3 + C1_MPh4 + C1_MPh5; 
+MPh2 = C2_MPh1 + DMP_2_6_DMP_3_5 + C2_MPh3 + C2_MPh4 + C2_MPh5 + DMP_1_7 + C2_MPh6B + C2_MPh6D + DMP_1_2;
+MPh3 = C3_MPh1 + C3_MPh2 + C3_MPh3 + C3_MPh4 + C3_MPh5 + C3_MPh6 + C3_MPh7;
+MPh = MPh1; %+ MPh2 + MPh3;
+MTPh = MPh1 + MPh2 + MPh3;
+
 PAH_matrix  = [ACY, ANT, BaA, CHY, FLU, IND, PHE, PYR];
 
 FLU_FLUPYR = FLU ./ (FLU + PYR);
@@ -409,30 +522,57 @@ IND_INDBgP = IND ./ (IND + BgP);
 
 BaA_BaACHY = BaA ./ (BaA + CHY);
 
-Sum3Ring = ACY + ACE + ANT + FLE + PHE + Retene; %sum of 3 ring PAH
+TotalPAH = (MTPh + PHE + ANT + FLU + PYR + BaA + CHY + BkF + BeP + BeA + BaP + IND + BgP); % Karp et. al 2020 
 
-TotalPAH = NAP + Sum3Ring + FLU + PYR + BaA + CHY + BkF + BbF + BaP + IND +DaA + BgP;%sum of all PAH's
+Sum3Ring = ANT + PHE + Retene; %sum of 3 ring PAH
 
-PAHSourceChange = Sum3Ring./TotalPAH;
+PAHSourceChange = Sum3Ring ./TotalPAH;
 
-FireInput = TotalPAH./C_31;
+FireInput = TotalPAH ./C_31;
 
-ConiferInput = Retene./(Sum3Ring);
+ConiferInput_retene = Retene ./ Sum3Ring; % Karp et al., 2020; Karp et al., 2018 => Retene./(Sum3Ring)
+
+GrassInput_pyrene = PYR ./ Sum3Ring;
+
+LMW = (PHE + ANT + FLU + PYR) ./ TotalPAH;
+
+DMP_y = DMP_1_7 ./ DMP_1_2;
+
+DMP_x = (DMP_1_7 + DMP_2_6_DMP_3_5) ./ (DMP_1_7 + DMP_2_6_DMP_3_5 + DMP_1_2);
+
+
+
+
 
 func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR);
 
-func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, isotopic_value, numsamples, t);
+%func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, isotopic_value, numsamples, t);
 
-func_plot_combustion_characteristics_FLUPYR_ANTPHE(FLU_FLUPYR, ANT_ANTPHE);
+%func_plot_combustion_characteristics_FLUPYR_ANTPHE(FLU_FLUPYR, ANT_ANTPHE);
 
-func_plot_combustion_characteristics_INDBgPBaACHY(IND_INDBgP, BaA_BaACHY);
+%func_plot_combustion_characteristics_INDBgPBaACHY(IND_INDBgP, BaA_BaACHY);
 
-func_plot_fire_input(FireInput, isotopic_value, numsamples, t);
+%func_plot_fire_input(FireInput, isotopic_value, numsamples, t);
 
-func_plot_PAH_source_change(PAHSourceChange, isotopic_value, numsamples, t);
+%func_plot_PAH_source_change(PAHSourceChange, isotopic_value, numsamples, t);
 
-func_plot_confier_input(ConiferInput, isotopic_value, numsamples, t);
+%func_plot_confier_input(ConiferInput_retene, isotopic_value, numsamples, t);
+%}
+
+[ADPI_source] = func_plot_adpi(PHE, MPh1, MPh2, MPh3);
+
+func_plot_methyl_PHE_veg_proxy(DMP_x, DMP_y, numsamples, t);
 
 func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t);
 
+func_plot_conifer_fire(ConiferInput_retene, FireInput, numsamples, t); 
 
+func_plot_grass_fire(GrassInput_pyrene, FireInput, numsamples, t);
+
+func_plot_grass_vs_conifer(ConiferInput_retene, GrassInput_pyrene, numsamples, t);
+
+func_plot_LMW(LMW, isotopic_value, numsamples, t);
+
+[MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId);
+
+func_consolidated_temporal_plot(siteId, isotopic_value, ConiferInput_retene, FireInput, MAP, MAT_Sal, MAT_PWI, ACL, VPD, t, age_XRF, numsamples);

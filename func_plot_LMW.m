@@ -1,25 +1,30 @@
 function [] = func_plot_LMW(LMW, IsotopicValue, numsamples, t)
 
- hold on
+    hold on
     grid on;
-    yyaxis left;
-    c = linspace(t(1),t(numsamples),length(t));
     figure('Name', 'LMW: Smoke v/s combustion residue');
-    lmw_plot = scatter(t, LMW,[],c);
+    lmw_plot = scatter(t, LMW, 'filled');
     xlabel('Time (Ma)');
     ylabel('LMW');
     set(gca, 'XDir','reverse');
     
-    yyaxis right;
-    isotope_plot = scatter(t,IsotopicValue,'*','r');
-    ylabel('δ13C (‰)');
-    ylim([-35, -10]);
-    legend([lmw_plot,isotope_plot], {'LMW' , 'δ13C of Bulk Organic Matter'})
+    x_h_lim = 1.1*max(t);
+    x_l_lim = 0.9*min(t);
+
     
+    line([x_l_lim,x_h_lim],[0.75,0.75], 'Color','red','LineStyle','--');
+    line([x_l_lim,x_h_lim],[0.95,0.95], 'Color','red','LineStyle','--');
+    
+    line([x_l_lim,x_h_lim],[0.8,0.8], 'Color','blue','LineStyle','-');
+    line([x_l_lim,x_h_lim],[0.35,0.35], 'Color','blue','LineStyle','-');
+    
+    xlim([x_l_lim x_h_lim]);
+    ylim([0 1]);
+   
     %%Save plot file
     %Location to save Plots
     PlotFolder = strcat(pwd,'/Plots/');
-    filename = 'lmw';
+    filename = 'lmw.jpg';
     %Corner case handling
     %if no Plot folder exists
     if ~exist(PlotFolder, 'dir')

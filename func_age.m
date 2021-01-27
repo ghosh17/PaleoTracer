@@ -1,6 +1,6 @@
 %%Calculate Ages for paleosol outcrops assuming constant sedimentation rate
 
-%%Palo Pintado
+%%Palo Pintado Age Determination
 function [return_matrix,return_ages,return_Sample_name] = func_age(site_id)
 
 if strcmp(site_id,'PP') || strcmp(site_id,'all')
@@ -21,7 +21,7 @@ if strcmp(site_id,'PP') || strcmp(site_id,'all')
     % this implies, an increase in age of 7.317e-4 Ma
     % per m increase in section. 
 
-
+    %Age = Max_age - ((span_of_age /stratigrpahic height)*(Stratigraphy_height-where top age occurs))
     PP_ages = 7.24 - ((1.26/1722) * (Stratigraphic_height - 8));%Ma
     return_ages = PP_ages;
     for j=1:2
@@ -56,7 +56,7 @@ if strcmp(site_id,'PP') || strcmp(site_id,'all')
     
 end
 
-%%La Vina
+%%La Vina Age determination
 
 if strcmp(site_id,'LV') || strcmp(site_id,'all')
 
@@ -85,6 +85,7 @@ if strcmp(site_id,'LV') || strcmp(site_id,'all')
     % Therefore, identified ash layer A4 must be the paleosol identified by
     % Carrera et. al
 
+    
     LV_ages = 14.4 - ((14.4 - 8.73) / ((161+250)-129.5)*(Stratigraphic_height-129.5));%Ma
     return_ages = LV_ages;
     
@@ -117,5 +118,68 @@ if strcmp(site_id,'LV') || strcmp(site_id,'all')
             end
         end
     end
+end
+
+
+
+%%Rio Iruya Age determination
+
+if strcmp(site_id,'RI') || strcmp(site_id,'all')
+    stratigraphic_height_file = strcat(site_id,'_Stratigraphic_height.xlsx');
+    [~, ~, strat_height_all] = xlsread(stratigraphic_height_file,'A:A'); %Read in Stratigraphic height from excel sheet.
+    
+    Stratigraphic_height = str2double(string(strat_height_all));
+    
+    RI = (1:1:length(Stratigraphic_height));
+
+    Rio_Iruya_constant = 'RI_';
+    %Rio_Iruya_Jen_constant = 'RI_J'; % RI has parallel stratigraphy as Jen + Sol walked a separate section from Ethan and David
+    
+    count = 1;
+    
+    for i=1:length(Stratigraphic_height)
+        % Stratigraphy defined such that Ethan/David samples first 115 then
+        % Jen/Sol samples.
+        % In order to handle RI_J1 => RI_113. ie 
+        if count <=113
+            RI_Sample_name(i) = Rio_Iruya_constant + string(RI(i));
+        else
+            RI_Sample_name(i) = Rio_Iruya_constant + string(count);
+        end
+            
+        count = count + 1;
+        return_Sample_name(i) = RI_Sample_name(i);
+         
+    end
+    
+
+    % Ash layer @ 204.5 m in section = Amidon et al., 2015
+    % Average sedimentation rate in paper determined to be 0.93 Km/My
+    % Each m corresponds to 1/930 My/m = 0.00107526881 My/m
+    % The ash layer occurs at 204.5m in our stratigraphy.
+    % Adjust stratigraphy to reflect 6.49 My at 204.5 m => (Stratigraphic_height - 204.5)
+
+
+    RI_ages = 6.49 - (0.00107526881 * (Stratigraphic_height - 204.5));%Ma
+    
+    return_ages = RI_ages;
+    for j=1:2
+        for k=1:length(Stratigraphic_height)
+            if j == 1
+                Rio_Iruya_matrix(j,k) = RI_Sample_name(k);
+            else
+                Rio_Iruya_matrix(j,k) = RI_ages(k);
+            end
+        end
+    end
+
+    %assign to return variable
+    
+    for j=1:2
+        for k=1:length(Stratigraphic_height)
+            return_matrix(j,k) = Rio_Iruya_matrix(j,k);
+        end
+    end
+    
 end
 

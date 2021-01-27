@@ -1,4 +1,4 @@
-function [MAP, MAT_Sal, age_XRF] = func_plot_XRF(siteId)
+function [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId)
 
     XRF_temp = strcat(siteId,'_XRF.xlsx');
     [~, ~, XRF_all] = xlsread(XRF_temp);

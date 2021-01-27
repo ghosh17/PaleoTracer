@@ -40,7 +40,7 @@ function [] = func_plot_isotopic_ratio(t,numsamples,IsotopicRatios)
     %%Save plot file
     %Location to save Plots
     PlotFolder = strcat(pwd,'/Plots/');
-    filename = 'δ13C_temporal';
+    filename = 'δ13C_temporal.jpg';
     %Corner case handling
     %if no Plot folder exists
     if ~exist(PlotFolder, 'dir')

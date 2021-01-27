@@ -24,7 +24,7 @@ function [] = func_plot_PAH_source_change(PAHSourceChange, IsotopicValue, numsam
     %%Save plot file
     %Location to save Plots
     PlotFolder = strcat(pwd,'/Plots/');
-    filename = 'PAH_provenance';
+    filename = 'PAH_provenance.jpg';
     %Corner case handling
     %if no Plot folder exists
     if ~exist(PlotFolder, 'dir')

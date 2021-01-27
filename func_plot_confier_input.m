@@ -1,11 +1,11 @@
 function [] = func_plot_confier_input(Gym_Ang_ConiferInput, IsotopicValue, numsamples, t)
-    %hold on
+   
     grid on;
     %xxaxis left;
     %c = linspace(t(1),t(numsamples),length(t));
     figure('Name', 'Confier/Gym/Ang Input: Retene/3RingSum');
     Gym_Ang_conifer_plot = scatter(Gym_Ang_ConiferInput, t, 'r');
-    xlabel('Retene/(Retene + PHE + FLU)');
+    xlabel('Retene/(Retene + PHE + ANT)');
     ylabel('Time (Ma)');
     set(gca, 'YDir','reverse');
     
@@ -21,7 +21,7 @@ function [] = func_plot_confier_input(Gym_Ang_ConiferInput, IsotopicValue, numsa
     %%Save plot file
     %Location to save Plots
     PlotFolder = strcat(pwd,'/Plots/');
-    filename = 'Gym_Ang_Confier_input';
+    filename = 'Gym_Ang_Confier_input.jpg';
     %Corner case handling
     %if no Plot folder exists
     if ~exist(PlotFolder, 'dir')
@@ -31,5 +31,4 @@ function [] = func_plot_confier_input(Gym_Ang_ConiferInput, IsotopicValue, numsa
     %Save all figures to this folder
     saveas(gcf, fullfile(PlotFolder, filename));
     
-    %hold off
 end
