@@ -45,7 +45,7 @@ close all
 clf
 
 
-siteId = 'RI';
+siteId = 'PP';
 
 %%Remove figure folder (output folder) if it exists
 PlotFolder = strcat(pwd,'/Plots');
@@ -363,7 +363,7 @@ while j < col
             if (strcmp(data_all(i,j),'C2-PHE3 (2,7-DMP)'))
                 C2_MPh3(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
-            %%
+            
             if (strcmp(data_all(i,j),'C2-PHE4 (1,3-/3,9-/2,10-/3,10-DMP)'))
                 C2_MPh4(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
@@ -469,6 +469,8 @@ alkanes_matrix = [C_20, C_21, C_22, C_23, C_24, C_25, C_26, C_27, C_28, C_29, C_
 
 VPD = 1.3125 - sqrt(14.1208 - 0.4629*ACL);
 
+Alkane_veg_ratio = C_33./(C_33+C_29);
+
 %Function to plot ternary plot for C31,C29,C27;C33,C29,C27;C35,C29,C27; Bush,
 %McInerney, et.al
 %Color per isotopic ratio. I want to be able to visualize how C3/C4
@@ -510,6 +512,25 @@ MPh3 = C3_MPh1 + C3_MPh2 + C3_MPh3 + C3_MPh4 + C3_MPh5 + C3_MPh6 + C3_MPh7;
 MPh = MPh1; %+ MPh2 + MPh3;
 MTPh = MPh1 + MPh2 + MPh3;
 
+TotalPAH = (MTPh + PHE + ANT + FLU + PYR + BaA + CHY + BkF + BeP + BeA + BaP + IND + BgP); % Karp et. al 2020 
+
+
+%%%%%%%%%%%%
+[ADPI_source, ADPI_pyro_petro_index, isADPIpyrogenic, TPh] = func_plot_adpi(PHE, MPh1, MPh2, MPh3, numsamples);
+
+[pyr_frac, petro_frac, weathered_frac] = func_NMF_ADPI(siteId, TPh, t);
+
+pyr_PAH = pyr_frac .* TotalPAH;
+
+petro_PAH = petro_frac .* TotalPAH;
+
+petro_PAH_normalized = petro_PAH./C_31;
+
+weathered_PAH = weathered_frac .* TotalPAH;
+
+weathered_PAH_normalized = weathered_PAH./C_31;
+%%%%%%%%%%%%
+
 PAH_matrix  = [ACY, ANT, BaA, CHY, FLU, IND, PHE, PYR];
 
 FLU_FLUPYR = FLU ./ (FLU + PYR);
@@ -522,13 +543,11 @@ IND_INDBgP = IND ./ (IND + BgP);
 
 BaA_BaACHY = BaA ./ (BaA + CHY);
 
-TotalPAH = (MTPh + PHE + ANT + FLU + PYR + BaA + CHY + BkF + BeP + BeA + BaP + IND + BgP); % Karp et. al 2020 
-
 Sum3Ring = ANT + PHE + Retene; %sum of 3 ring PAH
 
-PAHSourceChange = Sum3Ring ./TotalPAH;
+PAHSourceChange = Sum3Ring ./pyr_PAH;
 
-FireInput = TotalPAH ./C_31;
+FireInput = pyr_PAH ./C_31;
 
 ConiferInput_retene = Retene ./ Sum3Ring; % Karp et al., 2020; Karp et al., 2018 => Retene./(Sum3Ring)
 
@@ -540,11 +559,9 @@ DMP_y = DMP_1_7 ./ DMP_1_2;
 
 DMP_x = (DMP_1_7 + DMP_2_6_DMP_3_5) ./ (DMP_1_7 + DMP_2_6_DMP_3_5 + DMP_1_2);
 
+MPh_Ph = MPh./PHE;
 
-
-
-
-func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR);
+%func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR, t);
 
 %func_plot_FLU_FLUPYR_temporal(FLU_FLUPYR, isotopic_value, numsamples, t);
 
@@ -559,20 +576,28 @@ func_plot_source_degredation_MPhPHE_FLUPYR(MPh_PHE, FLU_FLUPYR);
 %func_plot_confier_input(ConiferInput_retene, isotopic_value, numsamples, t);
 %}
 
-[ADPI_source] = func_plot_adpi(PHE, MPh1, MPh2, MPh3);
 
-func_plot_methyl_PHE_veg_proxy(DMP_x, DMP_y, numsamples, t);
+%func_plot_methyl_PHE_veg_proxy(DMP_x, DMP_y, numsamples, t);
 
 func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t);
 
-func_plot_conifer_fire(ConiferInput_retene, FireInput, numsamples, t); 
+%func_plot_conifer_fire(ConiferInput_retene, FireInput, numsamples, t); 
 
-func_plot_grass_fire(GrassInput_pyrene, FireInput, numsamples, t);
+%func_plot_grass_fire(GrassInput_pyrene, FireInput, numsamples, t);
 
-func_plot_grass_vs_conifer(ConiferInput_retene, GrassInput_pyrene, numsamples, t);
+%func_plot_grass_vs_conifer(ConiferInput_retene, GrassInput_pyrene, numsamples, t);
 
-func_plot_LMW(LMW, isotopic_value, numsamples, t);
+%func_plot_LMW(LMW, isotopic_value, numsamples, t);
 
 [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId);
 
-func_consolidated_temporal_plot(siteId, isotopic_value, ConiferInput_retene, FireInput, MAP, MAT_Sal, MAT_PWI, ACL, VPD, t, age_XRF, numsamples);
+func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_Ph, petro_PAH_normalized, weathered_PAH_normalized, LMW, t, age_XRF, numsamples);
+
+func_vegetation_stratigraphy(siteId, isotopic_value, ConiferInput_retene, DMP_x, DMP_y, FireInput, Alkane_veg_ratio, ACL, VPD, t, age_XRF, numsamples);
+
+func_climate_stratigraphy(siteId, isotopic_value, ConiferInput_retene, FireInput, MAP, MAT_Sal, MAT_PWI, ACL, VPD, t, age_XRF, numsamples);
+
+
+
+
+

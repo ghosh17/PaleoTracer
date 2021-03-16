@@ -20,6 +20,12 @@ function [] = func_plot_LMW(LMW, IsotopicValue, numsamples, t)
     
     xlim([x_l_lim x_h_lim]);
     ylim([0 1]);
+    
+    xt_mid = (min(t) + max(t))/2;
+    xt = [xt_mid xt_mid];
+    yt = [0.9 0.6];
+    str = {'Smoke','Residue'};
+    text(xt,yt,str)
    
     %%Save plot file
     %Location to save Plots

@@ -7,8 +7,10 @@ function [] = func_plot_grass_vs_conifer(ConiferInput_retene, GrassInput_pyrene,
     %yyaxis left;
     %c = linspace(t(1),t(numsamples),length(t));
     figure('Name', 'Conifer v/s Grass Proliferation');
-    Fire_Grass_plot = scatter(GrassInput_pyrene, ConiferInput_retene, 'r','filled');
    
+    Fire_Grass_plot = scatter(GrassInput_pyrene, ConiferInput_retene, 'r','filled');
+
+    
     xlabel('Grass burn input (Pyrene-3ring PAH)');
     ylabel('Conifer burn input (Retene-3ring PAH)');
     xlim([0.9*min(GrassInput_pyrene) 1.1*max(GrassInput_pyrene)]);
