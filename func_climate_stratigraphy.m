@@ -48,15 +48,18 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     [age_XRF_sorted, sortIndex] = sort(age_XRF);
     MAP_sorted = MAP(sortIndex);
     
-    scatter(MAP_sorted, age_XRF_sorted, 'filled');
+    
     MAP_uncertainity = 182;
     errMAP = MAP_uncertainity * ones(length(MAP),1);
-    errorbar(MAP,age_XRF,errMAP, 'o', 'horizontal');
+    errorbar(MAP_sorted,age_XRF_sorted,errMAP, 'bo', 'horizontal');
+    hold on
+    scatter(MAP_sorted, age_XRF_sorted, 'b', 'filled');
+    hold off
     set(gca, 'YDir','reverse');
     ylabel('Time (my)', 'FontSize', 22);
     ylim([y_min y_max]);
-    MAP_x_min = 0.9*min(MAP) - MAP_uncertainity;
-    MAP_x_max = 1.1*max(MAP) + MAP_uncertainity;
+    MAP_x_min = 0.9*min(MAP_sorted) - MAP_uncertainity;
+    MAP_x_max = 1.1*max(MAP_sorted) + MAP_uncertainity;
     
     %Handle for PP and LV abnormally low modern ppt values
     if Modern_MAP < MAP_x_min
@@ -64,11 +67,11 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     end
     
     
-    set(gca, 'YDir','reverse', 'YTickLabel',[]);
+    set(gca, 'YDir','reverse');
     xlim([MAP_x_min, MAP_x_max]);
     ylim([y_min y_max]);
     xlabel('MAP (mm)', 'FontSize', 22);
-    line([Modern_MAP,Modern_MAP],[y_min,y_max],'Color','#7E2F8E','LineStyle',':');
+    line([Modern_MAP,Modern_MAP],[y_min,y_max],'Color','#7E2F8E','LineStyle','-.');
     
     hold on
     la = ~isnan(MAP_sorted);
@@ -140,11 +143,13 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     end
     
     MAT_Sal_uncertainity = 4.4;
-    errMAT_Sal = MAT_Sal_uncertainity * ones(length(MAT_Sal),1);
-    errorbar(MAT_Sal,age_XRF,errMAT_Sal, 'o', 'horizontal')
-   
-    MAT_x_min = 0.9*min(MAT_Sal)-MAT_Sal_uncertainity;
-    MAT_x_max = 1.1*max(MAT_Sal)+MAT_Sal_uncertainity;
+    errMAT_Sal = MAT_Sal_uncertainity * ones(length(MAT_Sal_sorted),1);
+    errorbar(MAT_Sal_sorted,age_XRF_sorted,errMAT_Sal, 'bo', 'horizontal')
+    hold on
+    scatter(MAT_Sal_sorted, age_XRF_sorted, 'b', 'filled');
+    hold off
+    MAT_x_min = 0.9*min(MAT_Sal_sorted)-MAT_Sal_uncertainity;
+    MAT_x_max = 1.1*max(MAT_Sal_sorted)+MAT_Sal_uncertainity;
     
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
     ylim([y_min y_max]);
@@ -152,7 +157,7 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     ylim([y_min y_max]);
     xlabel('MAT (°C) Sal', 'FontSize', 22);
     
-    line([Modern_MAT,Modern_MAT],[y_min,y_max],'Color','#7E2F8E','LineStyle',':');
+    line([Modern_MAT,Modern_MAT],[y_min,y_max],'Color','#7E2F8E','LineStyle','-.');
     
     hold on
     la = ~isnan(MAT_Sal_sorted);
@@ -196,11 +201,13 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     end
         
     MAT_PWI_uncertainity = 2.1;
-    errMAT_PWI = MAT_PWI_uncertainity * ones(length(MAT_PWI),1);
-    errorbar(MAT_PWI,age_XRF,errMAT_PWI, 'o', 'horizontal')
-   
-    MAT_x_min = 0.9*min(MAT_PWI) - MAT_PWI_uncertainity;
-    MAT_x_max = 1.1*max(MAT_PWI) + MAT_PWI_uncertainity;
+    errMAT_PWI = MAT_PWI_uncertainity * ones(length(MAT_PWI_sorted),1);
+    errorbar(MAT_PWI_sorted,age_XRF_sorted,errMAT_PWI, 'bo', 'horizontal');
+    hold on
+    scatter(MAT_PWI_sorted, age_XRF_sorted, 'b', 'filled');
+    hold off
+    MAT_x_min = 0.9*min(MAT_PWI_sorted) - MAT_PWI_uncertainity;
+    MAT_x_max = 1.1*max(MAT_PWI_sorted) + MAT_PWI_uncertainity;
     
     
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
@@ -209,7 +216,7 @@ function [] = func_climate_stratigraphy(SideId, IsotopicValue, ConiferInput, Fir
     ylim([y_min y_max]);
     xlabel('MAT (°C) PWI', 'FontSize', 22);
     
-    line([Modern_MAT,Modern_MAT],[y_min,y_max],'Color','#7E2F8E','LineStyle',':');
+    line([Modern_MAT,Modern_MAT],[y_min,y_max],'Color','#7E2F8E','LineStyle','-.');
     
     hold on
     la = ~isnan(MAT_PWI_sorted);

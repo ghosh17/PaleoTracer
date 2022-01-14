@@ -1,4 +1,4 @@
-function [] = func_plot_conifer_fire(ConiferInput_retene, FireInput, numsamples, t)
+function [] = func_plot_conifer_fire(ConiferInput_retene, DMP_y, FireInput, numsamples, t)
 
 grid on
     
@@ -22,7 +22,13 @@ grid on
     %ylim([ymin,ymax]);
     
     %legend([PAH_C_isotope_plot], {'Bulkδ13C v/s Fire input'})
-
+    figure('Name', 'Fire v/s Gymnnosperm/Conifer Proliferation');
+    Fire_DMP_y_Conifer_plot = scatter(DMP_y, FireInput, 'r','filled');
+    set(gca,'yscale','log');
+    xlabel('Gymnosperm/Conifer burn input (DMP-y)');
+    ylabel('Sum(PAH)/C31 (Increasing fire frequency)');
+    xlim([0.9*min(DMP_y) 1.1*max(DMP_y)]);
+    ylim([0.9*min(FireInput) 1.1*max(FireInput)]);
     
     
     %%Save plot file

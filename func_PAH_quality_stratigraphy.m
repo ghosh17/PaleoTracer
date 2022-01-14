@@ -36,7 +36,7 @@ function [] = func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_P
     ADPI_pyro_petro_index_sorted = ADPI_pyro_petro_index(sortIndex);
     
     hold on
-    la = ~(isnan(ADPI_pyro_petro_index_sorted)|isinf(ADPI_pyro_petro_index_sorted));
+    la = ~(isnan(ADPI_pyro_petro_index_sorted)|isinf(ADPI_pyro_petro_index_sorted)|not(ADPI_pyro_petro_index_sorted));
     
     plot(ADPI_pyro_petro_index_sorted(la), t_sorted(la), 'b-');
     
@@ -49,14 +49,15 @@ function [] = func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_P
     ylabel('Time (my)', 'FontSize', 22);
     ylim([y_min y_max]);
     
-    xt_ADPI_mid = (min(ADPI_pyro_petro_index)+max(ADPI_pyro_petro_index))/2;
-    xlim([1.1*min(ADPI_pyro_petro_index), 1.1*max(ADPI_pyro_petro_index)]);
+    xt_ADPI_mid = (min(ADPI_pyro_petro_index_sorted)+max(ADPI_pyro_petro_index_sorted))/2;
+    xlim([1.1*min(ADPI_pyro_petro_index_sorted), 1.1*max(ADPI_pyro_petro_index_sorted)]);
     xlabel('ADPI', 'FontSize', 22);
     line([0,0],[y_min,y_max]);
     
     yt_mid = (y_min + y_max)/2;
+    set(gca, 'XDir','reverse');
     
-    xt = [(min(ADPI_pyro_petro_index)/2) (max(ADPI_pyro_petro_index)/2)];
+    xt = [(min(ADPI_pyro_petro_index_sorted)/2) (max(ADPI_pyro_petro_index_sorted)/2)];
     yt = [yt_mid yt_mid];
     str = {'Petrogenic' 'Pyrogenic'};
     h1 = text(xt,yt,str);
@@ -70,8 +71,7 @@ function [] = func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_P
     MPh_Ph_sorted = MPh_Ph(sortIndex);
     
     scatter(MPh_Ph_sorted, t_sorted, 'filled');
-    set(gca, 'YDir','reverse');
-    ylabel('Time (my)', 'FontSize', 22);
+    set(gca, 'YDir','reverse', 'YTickLabel',[]);
     ylim([y_min y_max]);
     xlim([0, 1.1*max(MPh_Ph)]);
     xlabel('MPh/Ph', 'FontSize', 22);
@@ -155,7 +155,7 @@ function [] = func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_P
     ylim([y_min y_max]);
     xlabel('Weath. Σ(PAH)/C31', 'FontSize', 22);
     %xticks([0.001,0.01,0.1,1]);
-    set(gca, 'YDir','reverse', 'YTickLabel',[]);%%comment out when d13C available
+    %set(gca, 'YDir','reverse', 'YTickLabel',[]);%%comment out when d13C available
     
     hold on
     

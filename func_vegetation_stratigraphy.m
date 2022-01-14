@@ -1,4 +1,4 @@
-function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, DMP_x, DMP_y, FireInput, Alkane_veg_ratio, ACL, VPD, t, age_XRF, numsamples)
+function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, DMP_x, DMP_y, FireInput, Alkane_veg_ratio, ACL, VPD, t, age_XRF, numsamples, age_min, age_max)
 
     
 
@@ -43,9 +43,11 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
 
     scatter(IsotopicValue_sorted, t_sorted, 'filled');
     set(gca, 'YDir','reverse');
-    xlim([-35 -15]);
+    xmin = min(IsotopicValue_sorted) - 0.6;
+    xmax = max(IsotopicValue_sorted) + 0.6;
+    xlim([xmin xmax]);
     ylabel('Time (my)', 'FontSize', 22);
-    ylim([y_min y_max]);
+    ylim([age_min age_max]); %ylim([y_min y_max]);
     xlabel('δ13C (‰)', 'FontSize', 22);
     
     yt_mid = (y_min + y_max)/2;
@@ -54,6 +56,7 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     str = {'C3' 'C4'};
     h1 = text(xt,yt,str);
     set(h1,'Rotation',90);
+    line([-22.3,-22.3],[y_min,y_max]);
     
     
     hold on
@@ -64,7 +67,21 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
 
     plot(pp,t_sorted(la),'m--');
     
+    BOM_uncertainity = 0.5;
+    
+    errBOM = BOM_uncertainity * ones(length(IsotopicValue_sorted),1);
+    
+    errorbar(IsotopicValue_sorted,t_sorted,errBOM, 'bo', 'horizontal');
+
+    hold on
+    
+    scatter(IsotopicValue_sorted, t_sorted, 'b', 'filled');
+    
+    hold off
+    
+    hold on
     plot(IsotopicValue_sorted(la), t_sorted(la), 'b-');
+    hold off
     
     R = corrcoef([IsotopicValue_sorted(la)],[t_sorted(la)']);
     
@@ -76,34 +93,38 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     
     
     subplot(1,5,2);
-    gym_conf_x_min = 0.8*min(ConiferInput);
-    gym_conf_x_max = 1.2*max(ConiferInput);
+   
     
     %Sort time and Retene Conifer input
     [t_sorted, sortIndex] = sort(t);
     ConiferInput_sorted = ConiferInput(sortIndex);
     
+    gym_conf_x_min = 0.8*min(ConiferInput_sorted);
+    gym_conf_x_max = 1.2*max(ConiferInput_sorted);
+    
     scatter(ConiferInput_sorted, t_sorted, 'filled');
     
-    line([0.1,0.1],[y_min,y_max]);
-    line([0.5,0.5],[y_min,y_max]);
-    xlim([0 1]);
-    ylim([y_min y_max]);
+    %line([0.1,0.1],[y_min,y_max]);
+    %line([0.5,0.5],[y_min,y_max]);
+    xlim([0 gym_conf_x_max]);
+    ylim([age_min age_max]); %ylim([y_min y_max]);
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
-    xlabel('Ret/(Ret+Σ(3-ring PAH)', 'FontSize', 22);
-    xt = [0.05 0.3 0.7];
-    yt = [yt_mid yt_mid yt_mid];
-    str = {'Angiosperm' 'Mixed' 'Gymnosperm'};
+    xlabel('Ret/Σ(Pyrogenic PAH)', 'FontSize', 22);
+    xt = [0.7*gym_conf_x_max];
+    yt = [yt_mid];
+    str = {'Increasing Gymnosperm burn input'};
     h2 = text(xt,yt,str);
-    set(h2,'Rotation',90);
-    
+    set(h2,'Rotation',270);
+   
     hold on
     la = ~isnan(ConiferInput_sorted);
+    
     ap = polyfit(t_sorted(la),ConiferInput_sorted(la),1);
 
     pp = polyval(ap,t_sorted(la));
 
     plot(pp,t_sorted(la),'m--');
+    
     
     plot(ConiferInput_sorted(la), t_sorted(la), 'b-');
     
@@ -114,6 +135,7 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     text(mean(ConiferInput_sorted(la)),min(t_sorted(la)),num2str(Rsq))
     
     hold off
+    
     
     subplot(1,5,3);
     DMP_y_x_min = 0.8*min(DMP_y);
@@ -130,7 +152,7 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     line([2,2],[y_min,y_max]);
     line([10,10],[y_min,y_max]);
     xlim([0 DMP_y_x_max]);
-    ylim([y_min y_max]);
+    ylim([age_min age_max]); %ylim([y_min y_max]);
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
     xlabel('DMP_y', 'FontSize', 22);
     xt = [1 6 11];
@@ -141,19 +163,19 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     
     hold on
     la = ~(isnan(DMP_y_sorted)|isinf(DMP_y_sorted));
-    ap = polyfit(t_sorted(la),DMP_y_sorted(la),1);
+    %ap = polyfit(t_sorted(la),DMP_y_sorted(la),1);
 
-    pp = polyval(ap,t_sorted(la));
+    %pp = polyval(ap,t_sorted(la));
 
-    plot(pp,t_sorted(la),'m--');
+    %plot(pp,t_sorted(la),'m--');
     
     plot(DMP_y_sorted(la), t_sorted(la), 'b-');
     
-    R = corrcoef([DMP_y_sorted(la)],[t_sorted(la)']);
+    %R = corrcoef([DMP_y_sorted(la)],[t_sorted(la)']);
     
-    Rsq = R(1,2).^2;
+    %Rsq = R(1,2).^2;
 
-    text(mean(DMP_y_sorted(la)),min(t_sorted(la)),num2str(Rsq))
+    %text(mean(DMP_y_sorted(la)),min(t_sorted(la)),num2str(Rsq))
     
     hold off
     
@@ -169,8 +191,8 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     
     line([2,2],[y_min,y_max]);
     line([10,10],[y_min,y_max]);
-    xlim([0 DMP_x_x_max]);
-    ylim([y_min y_max]);
+    xlim([DMP_x_x_min DMP_x_x_max]);
+    ylim([age_min age_max]); %ylim([y_min y_max]);
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
     xlabel('DMP_x', 'FontSize', 22);
     line([0.6,0.6],[y_min,y_max]);
@@ -185,19 +207,19 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
 
     hold on
     la = ~(isnan(DMP_x_sorted)|isinf(DMP_x_sorted));
-    ap = polyfit(t_sorted(la),DMP_x_sorted(la),1);
+    %ap = polyfit(t_sorted(la),DMP_x_sorted(la),1);
 
-    pp = polyval(ap,t_sorted(la));
+%     pp = polyval(ap,t_sorted(la));
 
-    plot(pp,t_sorted(la),'m--');
+%     plot(pp,t_sorted(la),'m--');
     
     plot(DMP_x_sorted(la), t_sorted(la), 'b-');
     
-    R = corrcoef([DMP_x_sorted(la)],[t_sorted(la)']);
+%     R = corrcoef([DMP_x_sorted(la)],[t_sorted(la)']);
     
-    Rsq = R(1,2).^2;
+%     Rsq = R(1,2).^2;
 
-    text(mean(DMP_x_sorted(la)),min(t_sorted(la)),num2str(Rsq));
+%     text(mean(DMP_x_sorted(la)),min(t_sorted(la)),num2str(Rsq));
     
     hold off
     
@@ -253,9 +275,8 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     %set(gca,'xscale','log');
     set(gca, 'YDir','reverse', 'YTickLabel',[]);
     xlim([min(FireInput_sorted), max(FireInput_sorted)]);
-    ylim([y_min y_max]);
+    ylim([age_min age_max]); %ylim([y_min y_max]);
     xlabel('Pyr. Σ(PAH)/C31', 'FontSize', 22);
-    %xticks([0.001,0.01,0.1,1]);
     set(gca, 'YDir','reverse', 'YTickLabel',[]);%%comment out when d13C available
     
     hold on

@@ -60,7 +60,7 @@ end
 
 if strcmp(site_id,'LV') || strcmp(site_id,'all')
 
-    Stratigraphic_height = [0,0,0,6.5,6.5,6.5,9.5,9.5,9.5,9.5,9.5,14.5,14.5,29.5,29.5,46,62,62,75,75,82.5,82.5,82.5,88,88,92,92,98,98,104,104,113,113,122.5,122.5,129,129,129,155,155,250+3,250+3,250+8,250+8,250+18,250+18,250+95,250+95,250+107.5,250+107.5,missing,250+172,250+172,250+172,250+175,250+175,250+180,250+180,250+185,250+185,250+188,250+188,250+192.5,250+192.5,250+220,250+220,250+220,250+223,250+223,250+250+104.5,250+250+142];
+    Stratigraphic_height = [0,0,0,6.5,6.5,6.5,9.5,9.5,9.5,9.5,9.5,14.5,14.5,29.5,29.5,46,62,62,75,75,82.5,82.5,82.5,88,88,92,92,98,98,104,104,113,113,122.5,122.5,129,129,129,155,155,250+3,250+3,250+8,250+8,250+18,250+18,250+95,250+95,250+107.5,250+107.5,404,250+172,250+172,250+172,250+175,250+175,250+180,250+180,250+185,250+185,250+188,250+188,250+192.5,250+192.5,250+220,250+220,250+220,250+223,250+223,250+250+104.5,250+250+142];
     
     LV = [1:1:length(Stratigraphic_height)];
 
@@ -158,11 +158,24 @@ if strcmp(site_id,'RI') || strcmp(site_id,'all')
     % Each m corresponds to 1/930 My/m = 0.00107526881 My/m
     % The ash layer occurs at 204.5m in our stratigraphy.
     % Adjust stratigraphy to reflect 6.49 My at 204.5 m => (Stratigraphic_height - 204.5)
-
-
-    RI_ages = 6.49 - (0.00107526881 * (Stratigraphic_height - 204.5));%Ma
+    indx=0;
     
-    return_ages = RI_ages;
+ 
+    for indx=1:length(Stratigraphic_height)
+
+        if (Stratigraphic_height(indx) <= 204.5)
+            RI_ages(indx) = 6.49 - (((6.49 - 5.5) ./ (204.5-26)) .* (Stratigraphic_height(indx) - 26));
+        elseif ((Stratigraphic_height(indx) > 204.5) && (Stratigraphic_height(indx) <= 1540))
+            RI_ages(indx) = 5.5 - (((5.5 - 4.09) / (1540-204.5)) * (Stratigraphic_height(indx) - 204.5));
+        else
+            RI_ages(indx) = 4.09 - (((4.09 - 2.63) / (2176-1540)) * (Stratigraphic_height(indx) - 1540));
+        end
+
+        return_ages(indx) = RI_ages(indx);
+        
+    end
+
+    
     for j=1:2
         for k=1:length(Stratigraphic_height)
             if j == 1

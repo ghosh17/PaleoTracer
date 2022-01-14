@@ -6,7 +6,7 @@ function [ADPI_source, ADPI_pyro_petro_index, isADPIpyrogenic, TPh] = func_plot_
 
         %figure('Name', 'ADPI');
 
-        
+        %Handling empty
         if ((PHE(ii) == 0)&&(MPh1(ii) == 0)&&(MPh2(ii) == 0)&&(MPh3(ii) == 0))
             %{
             ADPI_pyro_petro_index = NaN;
@@ -14,7 +14,7 @@ function [ADPI_source, ADPI_pyro_petro_index, isADPIpyrogenic, TPh] = func_plot_
             isADPIpyrogenic = NaN;
             TPh = NaN;
             %}
-            ADPI_pyro_petro_index (ii) = Inf;
+            ADPI_pyro_petro_index (ii) = Inf;%Why should this be Inf and not NaN??
             isADPIpyrogenic(ii) = NaN;
             TPh (ii,1) = PHE(ii); 
             TPh (ii,2) = MPh1(ii); 

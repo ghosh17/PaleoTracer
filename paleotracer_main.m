@@ -29,7 +29,7 @@ Output(s):
 15 separate plots in foleder Plots located in pwd/Plots.
 
 
-Version: 0.2
+Version: 0.99
 
 #######
 
@@ -45,7 +45,7 @@ close all
 clf
 
 
-siteId = 'PP';
+siteId = 'RI';
 
 %%Remove figure folder (output folder) if it exists
 PlotFolder = strcat(pwd,'/Plots');
@@ -279,7 +279,6 @@ while j < col
                 ACY(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
             
-            
             if (strcmp(data_all(i,j),'BaA'))
                 BaA(sample_run) = cell2mat(data_all(i,j+5)) * conversion_factor;
             end
@@ -454,6 +453,9 @@ for ind = 1:length(run_samples)
     t(ind) = age_array(run_samples(ind));
 end
 
+age_min = min(age_array);
+age_max = max(age_array);
+
 %%Isotopic signature
 
 %{
@@ -518,7 +520,7 @@ TotalPAH = (MTPh + PHE + ANT + FLU + PYR + BaA + CHY + BkF + BeP + BeA + BaP + I
 %%%%%%%%%%%%
 [ADPI_source, ADPI_pyro_petro_index, isADPIpyrogenic, TPh] = func_plot_adpi(PHE, MPh1, MPh2, MPh3, numsamples);
 
-[pyr_frac, petro_frac, weathered_frac] = func_NMF_ADPI(siteId, TPh, t);
+[pyr_frac, petro_frac, weathered_frac] = func_NMF_ADPI(siteId, TPh, t, numsamples, sample_name);
 
 pyr_PAH = pyr_frac .* TotalPAH;
 
@@ -549,7 +551,7 @@ PAHSourceChange = Sum3Ring ./pyr_PAH;
 
 FireInput = pyr_PAH ./C_31;
 
-ConiferInput_retene = Retene ./ Sum3Ring; % Karp et al., 2020; Karp et al., 2018 => Retene./(Sum3Ring)
+ConiferInput_retene = Retene ./ pyr_PAH; %Ghosh, Hauswirth, Cotton Retene proxy definition  %Retene./Sum3Ring; % Karp et al., 2020; Karp et al., 2018 => Retene./(Sum3Ring)
 
 GrassInput_pyrene = PYR ./ Sum3Ring;
 
@@ -581,7 +583,7 @@ MPh_Ph = MPh./PHE;
 
 func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t);
 
-%func_plot_conifer_fire(ConiferInput_retene, FireInput, numsamples, t); 
+func_plot_conifer_fire(ConiferInput_retene, DMP_y, FireInput, numsamples, t); 
 
 %func_plot_grass_fire(GrassInput_pyrene, FireInput, numsamples, t);
 
@@ -593,7 +595,7 @@ func_plot_PAH_C_Isotope(FireInput, isotopic_value, numsamples, t);
 
 func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_Ph, petro_PAH_normalized, weathered_PAH_normalized, LMW, t, age_XRF, numsamples);
 
-func_vegetation_stratigraphy(siteId, isotopic_value, ConiferInput_retene, DMP_x, DMP_y, FireInput, Alkane_veg_ratio, ACL, VPD, t, age_XRF, numsamples);
+func_vegetation_stratigraphy(siteId, isotopic_value, ConiferInput_retene, DMP_x, DMP_y, FireInput, Alkane_veg_ratio, ACL, VPD, t, age_XRF, numsamples, age_min, age_max);
 
 func_climate_stratigraphy(siteId, isotopic_value, ConiferInput_retene, FireInput, MAP, MAT_Sal, MAT_PWI, ACL, VPD, t, age_XRF, numsamples);
 

@@ -6,17 +6,20 @@ function [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId)
     [~, ~, Age_XRF_temp] = xlsread(XRF_temp,'B:B');
     age_XRF = str2double(string(Age_XRF_temp));
     
-    [~, ~, MAP_temp] = xlsread(XRF_temp,'V:V');
+    [~, ~, MAP_temp] = xlsread(XRF_temp,'W:W');
     MAP = str2double(string(MAP_temp));
     
-    [~, ~, MAT_PWI_temp] = xlsread(XRF_temp,'X:X');
+    [~, ~, MAT_PWI_temp] = xlsread(XRF_temp,'Y:Y');
     MAT_PWI = str2double(string(MAT_PWI_temp));
     
     [~, ~, MAT_Sal_temp] = xlsread(XRF_temp,'Z:Z');
     MAT_Sal = str2double(string(MAT_Sal_temp));
     
+    
+    %{
     grid on;
     
+  
     % Plot MAP
     figure('Name', 'Mean Average Precipitation');
     MAP_plot = scatter(MAP, age_XRF, 'r');
@@ -91,6 +94,7 @@ function [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId)
     end
     %Save all figures to this folder
     saveas(gcf, fullfile(PlotFolder, filename));
+    %}
     
     
 end
