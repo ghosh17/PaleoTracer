@@ -268,6 +268,7 @@ function [] = func_vegetation_stratigraphy(SideId, IsotopicValue, ConiferInput, 
     
     %Sort time and Alkane input
     [t_sorted, sortIndex] = sort(t);
+    Fire_temp = FireInput(sortIndex);
     FireInput_sorted = log10(FireInput(sortIndex));
     
     scatter(FireInput_sorted, t_sorted, 'filled');
