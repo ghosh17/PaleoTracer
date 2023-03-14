@@ -1,4 +1,4 @@
-function [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId)
+function [MAP, MAP_PPM, MAP_PPM_MIN, MAP_PPM_MAX, MAT_Sal, MAT_PPM, MAT_PPM_MIN, MAT_PPM_MAX, MAT_PWI, age_XRF, age_PPM] = func_plot_XRF(siteId)
 
     XRF_temp = strcat(siteId,'_XRF.xlsx');
     [~, ~, XRF_all] = xlsread(XRF_temp);
@@ -15,6 +15,37 @@ function [MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId)
     [~, ~, MAT_Sal_temp] = xlsread(XRF_temp,'Z:Z');
     MAT_Sal = str2double(string(MAT_Sal_temp));
     
+    %%%%%%%%%%%%%%%
+    %PPM Model
+    
+    PPM_temp = strcat(siteId,'_Geochem.xlsx');
+    [~, ~, XRF_all] = xlsread(PPM_temp);
+
+     [~, ~, Age_PPM_temp] = xlsread(PPM_temp,'B:B');
+    age_PPM = str2double(string(Age_PPM_temp));
+
+
+    %PPM MAP and uncertainty
+    [~, ~, MAP_PPM_temp] = xlsread(PPM_temp,'D:D');
+    MAP_PPM = str2double(string(MAP_PPM_temp));
+
+    [~, ~, MAP_PPM_MIN_temp] = xlsread(PPM_temp,'I:I');
+    MAP_PPM_MIN = str2double(string(MAP_PPM_MIN_temp));
+
+    [~, ~, MAP_PPM_MAX_temp] = xlsread(PPM_temp,'J:J');
+    MAP_PPM_MAX = str2double(string(MAP_PPM_MAX_temp));
+
+
+    %PPM MAT and uncertainty
+    [~, ~, MAT_PPM_temp] = xlsread(PPM_temp,'G:G');
+    MAT_PPM = str2double(string(MAT_PPM_temp));
+
+    [~, ~, MAT_PPM_MIN_temp] = xlsread(PPM_temp,'K:K');
+    MAT_PPM_MIN = str2double(string(MAT_PPM_MIN_temp));
+
+    [~, ~, MAT_PPM_MAX_temp] = xlsread(PPM_temp,'L:L');
+    MAT_PPM_MAX = str2double(string(MAT_PPM_MAX_temp));
+
     
     %{
     grid on;

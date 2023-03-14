@@ -591,7 +591,7 @@ func_plot_conifer_fire(ConiferInput_retene, DMP_y, FireInput, numsamples, t);
 
 %func_plot_LMW(LMW, isotopic_value, numsamples, t);
 
-[MAP, MAT_Sal, MAT_PWI, age_XRF] = func_plot_XRF(siteId);
+[MAP, MAP_PPM, MAP_PPM_MIN, MAP_PPM_MAX, MAT_Sal, MAT_PPM, MAT_PPM_MIN, MAT_PPM_MAX, MAT_PWI, age_XRF, age_PPM] = func_plot_XRF(siteId);
 
 func_PAH_quality_stratigraphy(siteId, ADPI_pyro_petro_index, MPh_Ph, petro_PAH_normalized, weathered_PAH_normalized, LMW, t, age_XRF, numsamples);
 
@@ -599,6 +599,7 @@ func_vegetation_stratigraphy(siteId, isotopic_value, ConiferInput_retene, DMP_x,
 
 func_climate_stratigraphy(siteId, isotopic_value, ConiferInput_retene, FireInput, MAP, MAT_Sal, MAT_PWI, ACL, VPD, t, age_XRF, numsamples);
 
+func_PPM_climate_stratigraphy(siteId, MAP_PPM, MAP_PPM_MIN, MAP_PPM_MAX, MAT_PPM, MAT_PPM_MIN, MAT_PPM_MAX, t, age_PPM, numsamples);
 
 
 
